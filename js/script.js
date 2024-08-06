@@ -79,8 +79,20 @@ const displayMovements = function (arr) {
 };
 
 displayMovements(account1.movements);
-///////////////////////////////////////////////////////
+/////////////////////////////////////////////////////// Username
+// const user = "Steven Thomas Williams";
 
+const creatUserName = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(" ")
+      .map((item) => item[0])
+      .join("");
+  });
+};
+creatUserName(accounts);
+////////////////////////////////////////////// Eur/USD
 const eurToUSD = 1.1;
 
 const movementUSD = account1.movements.map((item) => item * eurToUSD);
