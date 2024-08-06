@@ -60,24 +60,6 @@ const inputClosePin = document.querySelector(".form__input--pin");
 
 //////////////////////////////////
 
-// const displayMovements = function (arr) {
-//   arr.forEach(function (movment, i) {
-//     const type = movment > 0 ? "deposit" : "withdrawal";
-//     const html = `
-//       <div class="movements__row">
-//           <div class="movements__type movements__type--${type}">${
-//       i + 1
-//     } ${type}</div>
-//           <div class="movements__date">3 days ago</div>
-//           <div class="movements__value"> ${movment}€</div>
-//         </div>
-//    `;
-//     containerMovements.insertAdjacentHTML("afterbegin", html);
-//   });
-// };
-
-// displayMovements(account1.movements);
-
 const displayMovements = function (arr) {
   containerMovements.innerHTML = "";
   arr.forEach(function (movement, i) {
@@ -97,3 +79,17 @@ const displayMovements = function (arr) {
 };
 
 displayMovements(account1.movements);
+///////////////////////////////////////////////////////
+
+const eurToUSD = 1.1;
+
+const movementUSD = account1.movements.map((item) => item * eurToUSD);
+// console.log(movementUSD);
+
+const movementsDescriptions = account1.movements.map((item, i) => {
+  return `Movement ${i + 1}: You ${
+    item > 0 ? "deposited" : "withdrew"
+  } ${Math.abs(item)}`;
+});
+
+console.log(movementsDescriptions);
