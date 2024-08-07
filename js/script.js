@@ -103,7 +103,7 @@ creatUserName(accounts);
 
 const getMax = function (accs) {
   console.log(accs);
-  const max = accs.reduce((item,arr) => Math.max(item,arr),accs[0]);
+  const max = accs.reduce((item, arr) => Math.max(item, arr), accs[0]);
   console.log(max);
 };
 
@@ -128,3 +128,28 @@ console.log(movementsDescriptions);
 // console.log(withdrawls);
 
 // const balance = account1.movements.reduce((acc, cur) => acc + cur, 0);
+
+/////////////////// challenge
+
+// test data 1 [5,2,4,1,15,8,3]
+// test data 2 [16,6,10,5,6,1,4]
+
+const calcAverageHumanAge = function (arr) {
+  const humanAge = arr.map((item) => (item <= 2 ? 2 * item : 16 + item * 4));
+  const adultDogs = humanAge.filter((item) => item >= 18);
+  const averageDogAges =
+    adultDogs.reduce((acc, curr) => acc + curr, 0) / adultDogs.length;
+  console.log(humanAge);
+  console.log(adultDogs);
+  console.log(averageDogAges);
+};
+
+calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
+
+// const calcAverageHumanAge = function (arr) {
+//   const humanAge = arr.map((item) => (item <= 2 ? 2 * item : 16 + item * 4));
+//   console.log(humanAge);
+// };
+
+// calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
