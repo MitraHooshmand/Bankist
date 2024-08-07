@@ -79,8 +79,15 @@ const displayMovements = function (arr) {
 };
 
 displayMovements(account1.movements);
+
+/////////////////////////////////////////////////  Print Balance
+
+const calcDisplayBalance = function (accs) {
+  labelBalance.textContent = `${accs.reduce((acc, cur) => acc + cur, 0)} ERU`;
+};
+
+calcDisplayBalance(account1.movements);
 /////////////////////////////////////////////////////// Username
-// const user = "Steven Thomas Williams";
 
 const creatUserName = function (accs) {
   accs.forEach(function (acc) {
@@ -92,12 +99,19 @@ const creatUserName = function (accs) {
   });
 };
 creatUserName(accounts);
+/////////////////////////////////////////////////// Get Max
+
+const getMax = function (accs) {
+  console.log(accs);
+  const max = accs.reduce((item,arr) => Math.max(item,arr),accs[0]);
+  console.log(max);
+};
+
+getMax(account1.movements);
 ////////////////////////////////////////////// Eur/USD
 const eurToUSD = 1.1;
 
 const movementUSD = account1.movements.map((item) => item * eurToUSD);
-// console.log(movementUSD);
-
 const movementsDescriptions = account1.movements.map((item, i) => {
   return `Movement ${i + 1}: You ${
     item > 0 ? "deposited" : "withdrew"
@@ -105,3 +119,12 @@ const movementsDescriptions = account1.movements.map((item, i) => {
 });
 
 console.log(movementsDescriptions);
+/////////////////////////////////////////////////////////
+
+// const deposites = account1.movements.filter((item) => item > 0);
+// console.log(deposites);
+
+// const withdrawls = account1.movements.filter((item) => item <= 0);
+// console.log(withdrawls);
+
+// const balance = account1.movements.reduce((acc, cur) => acc + cur, 0);
