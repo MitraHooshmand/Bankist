@@ -71,13 +71,12 @@ const displayMovements = function (arr) {
       i + 1
     } ${type}</div>
           <div class="movements__date">3 days ago</div>
-          <div class="movements__value">${movement}€</div>
+          <div class="movements__value">${movement} €</div>
         </div>
 `;
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 };
-
 displayMovements(account1.movements);
 
 /////////////////////////////////////////////////  Print Balance
@@ -85,8 +84,27 @@ displayMovements(account1.movements);
 const calcDisplayBalance = function (accs) {
   labelBalance.textContent = `${accs.reduce((acc, cur) => acc + cur, 0)} ERU`;
 };
-
 calcDisplayBalance(account1.movements);
+//////////////////////////////////////////////////////// Summery in/out
+
+const calcDisplaySummery = function (arr, intrest) {
+  const depositeSum = arr
+    .filter((item) => item > 0)
+    .reduce((acc, curr) => acc + curr, 0);
+  labelSumIn.textContent = `${depositeSum} €`;
+  const withdrawlSum = arr
+    .filter((item) => item < 0)
+    .reduce((acc, curr) => acc + curr, 0);
+  labelSumOut.textContent = `${Math.abs(withdrawlSum)} €`;
+  const intrestRate = arr
+    .filter((item) => item > 0)
+    .map((item) => (item * intrest) / 100)
+    .filter((item) => item > 1)
+    .reduce((acc, curr) => acc + curr, 0);
+  labelSumInterest.textContent = `${intrestRate} €`;
+};
+calcDisplaySummery(account1.movements, account1.interestRate);
+
 /////////////////////////////////////////////////////// Username
 
 const creatUserName = function (accs) {
@@ -102,15 +120,13 @@ creatUserName(accounts);
 /////////////////////////////////////////////////// Get Max
 
 const getMax = function (accs) {
-  console.log(accs);
+  // console.log(accs);
   const max = accs.reduce((item, arr) => Math.max(item, arr), accs[0]);
   console.log(max);
 };
-
 getMax(account1.movements);
 ////////////////////////////////////////////// Eur/USD
 const eurToUSD = 1.1;
-
 const movementUSD = account1.movements.map((item) => item * eurToUSD);
 const movementsDescriptions = account1.movements.map((item, i) => {
   return `Movement ${i + 1}: You ${
@@ -118,7 +134,7 @@ const movementsDescriptions = account1.movements.map((item, i) => {
   } ${Math.abs(item)}`;
 });
 
-console.log(movementsDescriptions);
+// console.log(movementsDescriptions);
 /////////////////////////////////////////////////////////
 
 // const deposites = account1.movements.filter((item) => item > 0);
@@ -134,18 +150,18 @@ console.log(movementsDescriptions);
 // test data 1 [5,2,4,1,15,8,3]
 // test data 2 [16,6,10,5,6,1,4]
 
-const calcAverageHumanAge = function (arr) {
-  const humanAge = arr.map((item) => (item <= 2 ? 2 * item : 16 + item * 4));
-  const adultDogs = humanAge.filter((item) => item >= 18);
-  const averageDogAges =
-    adultDogs.reduce((acc, curr) => acc + curr, 0) / adultDogs.length;
-  console.log(humanAge);
-  console.log(adultDogs);
-  console.log(averageDogAges);
-};
+// const calcAverageHumanAge = function (arr) {
+//   const humanAge = arr.map((item) => (item <= 2 ? 2 * item : 16 + item * 4));
+//   const adultDogs = humanAge.filter((item) => item >= 18);
+//   const averageDogAges =
+//     adultDogs.reduce((acc, curr) => acc + curr, 0) / adultDogs.length;
+//   console.log(humanAge);
+//   console.log(adultDogs);
+//   console.log(averageDogAges);
+// };
 
-calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
-calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
+// calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+// calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
 
 // const calcAverageHumanAge = function (arr) {
 //   const humanAge = arr.map((item) => (item <= 2 ? 2 * item : 16 + item * 4));
