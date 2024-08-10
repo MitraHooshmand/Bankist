@@ -77,14 +77,14 @@ const displayMovements = function (arr) {
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 };
-displayMovements(account1.movements);
+// displayMovements(account1.movements);
 
 /////////////////////////////////////////////////  Print Balance
 
 const calcDisplayBalance = function (accs) {
   labelBalance.textContent = `${accs.reduce((acc, cur) => acc + cur, 0)} ERU`;
 };
-calcDisplayBalance(account1.movements);
+// calcDisplayBalance(account1.movements);
 //////////////////////////////////////////////////////// Summery in/out
 
 const calcDisplaySummery = function (arr, intrest) {
@@ -103,7 +103,7 @@ const calcDisplaySummery = function (arr, intrest) {
     .reduce((acc, curr) => acc + curr, 0);
   labelSumInterest.textContent = `${intrestRate} €`;
 };
-calcDisplaySummery(account1.movements, account1.interestRate);
+// calcDisplaySummery(account1.movements, account1.interestRate);
 
 /////////////////////////////////////////////////////// Username
 
@@ -117,6 +117,30 @@ const creatUserName = function (accs) {
   });
 };
 creatUserName(accounts);
+
+let currentAccount;
+/////////////////////////////////////////////////// Login
+btnLogin.addEventListener("click", function (e) {
+  e.preventDefault();
+  currentAccount = accounts.find(
+    (item) => item.username === inputLoginUsername.value
+  );
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    //display UI end message
+    document.querySelector(
+      ".welcome"
+    ).textContent = `Hi🖐, dear ${currentAccount.owner.split(" ",1)}`;
+    containerApp.style.opacity = 100;
+    //display movements
+
+    //display balance
+
+    //display summery
+  } else {
+    console.log("wrong pass");
+  }
+});
+
 /////////////////////////////////////////////////// Get Max
 
 const getMax = function (accs) {
@@ -124,7 +148,7 @@ const getMax = function (accs) {
   const max = accs.reduce((item, arr) => Math.max(item, arr), accs[0]);
   console.log(max);
 };
-getMax(account1.movements);
+// getMax(account1.movements);
 ////////////////////////////////////////////// Eur/USD
 const eurToUSD = 1.1;
 const movementUSD = account1.movements.map((item) => item * eurToUSD);
@@ -151,13 +175,19 @@ const movementsDescriptions = account1.movements.map((item, i) => {
 // test data 2 [16,6,10,5,6,1,4]
 
 // const calcAverageHumanAge = function (arr) {
-//   const humanAge = arr.map((item) => (item <= 2 ? 2 * item : 16 + item * 4));
-//   const adultDogs = humanAge.filter((item) => item >= 18);
-//   const averageDogAges =
-//     adultDogs.reduce((acc, curr) => acc + curr, 0) / adultDogs.length;
-//   console.log(humanAge);
-//   console.log(adultDogs);
-//   console.log(averageDogAges);
+// const humanAge = arr.map((item) => (item <= 2 ? 2 * item : 16 + item * 4));
+// const adultDogs = humanAge.filter((item) => item >= 18);
+// const averageDogAges =
+//   adultDogs.reduce((acc, curr) => acc + curr, 0) / adultDogs.length;
+// console.log(humanAge);
+// console.log(adultDogs);
+// console.log(averageDogAges);
+//////////////////////////////////////////second type => chaining method
+//   const humanAge = arr
+//     .map((item) => (item <= 2 ? 2 * item : 16 + item * 4))
+//     .filter((item) => item >= 18)
+//     .reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+//     console.log(humanAge);
 // };
 
 // calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
