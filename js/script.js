@@ -82,7 +82,7 @@ const displayMovements = function (arr) {
 /////////////////////////////////////////////////  Print Balance
 
 const calcDisplayBalance = function (accs) {
-  labelBalance.textContent = `${accs.reduce((acc, cur) => acc + cur, 0)} ERU`;
+  labelBalance.textContent = `${accs.reduce((acc, cur) => acc + cur, 0)} € `;
 };
 // calcDisplayBalance(account1.movements);
 //////////////////////////////////////////////////////// Summery in/out
@@ -129,13 +129,19 @@ btnLogin.addEventListener("click", function (e) {
     //display UI end message
     document.querySelector(
       ".welcome"
-    ).textContent = `Hi🖐, dear ${currentAccount.owner.split(" ",1)}`;
+    ).textContent = `Hi🖐, dear ${currentAccount.owner.split(" ", 1)}`;
     containerApp.style.opacity = 100;
+    //clear the input fields
+    inputLoginPin.value = inputLoginUsername.value = "";
+    inputLoginPin.blur();
     //display movements
+    displayMovements(currentAccount.movements);
 
     //display balance
+    calcDisplayBalance(currentAccount.movements);
 
     //display summery
+    calcDisplaySummery(currentAccount.movements, currentAccount.interestRate);
   } else {
     console.log("wrong pass");
   }
