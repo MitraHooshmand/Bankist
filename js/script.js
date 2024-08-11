@@ -178,6 +178,22 @@ btnTransfer.addEventListener("click", function (e) {
   inputTransferAmount.blur();
   // console.log(amount, recieverAccount, currentAccount);
 });
+
+////////////////////////////////////////////////////   Loan
+
+btnLoan.addEventListener("click", function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  if (
+    amount > 0 &&
+    currentAccount.movements.some((item) => item >= amount * 0.1)
+  ) {
+    currentAccount.movements.push(amount);
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = "";
+});
+
 //////////////////////////////////////////////////// Close Account
 
 btnClose.addEventListener("click", function (e) {
@@ -253,3 +269,12 @@ const movementsDescriptions = account1.movements.map((item, i) => {
 // };
 
 // calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+
+// const mapArray = accounts.map((item) => item.movements);
+// const nestedArray = mapArray.flat();
+// const sumOfArray = nestedArray.reduce((acc,curr)=> acc+curr,0)
+
+// const sumOfArray = accounts
+//   .flatMap((item) => item.movements)
+//   .reduce((acc, curr) => acc + curr, 0);
+// console.log(sumOfArray);
