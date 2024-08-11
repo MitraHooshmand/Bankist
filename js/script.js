@@ -82,7 +82,8 @@ const displayMovements = function (arr) {
 /////////////////////////////////////////////////  Print Balance
 
 const calcDisplayBalance = function (accs) {
-  labelBalance.textContent = `${accs.reduce((acc, cur) => acc + cur, 0)} € `;
+  accs.balance = `${accs.movements.reduce((acc, cur) => acc + cur, 0)} € `;
+  labelBalance.textContent = accs.balance;
 };
 // calcDisplayBalance(account1.movements);
 //////////////////////////////////////////////////////// Summery in/out
@@ -138,13 +139,24 @@ btnLogin.addEventListener("click", function (e) {
     displayMovements(currentAccount.movements);
 
     //display balance
-    calcDisplayBalance(currentAccount.movements);
+    calcDisplayBalance(currentAccount);
 
     //display summery
     calcDisplaySummery(currentAccount.movements, currentAccount.interestRate);
   } else {
     console.log("wrong pass");
   }
+});
+
+/////////////////////////////////////////////////// Transfer
+
+btnTransfer.addEventListener("click", function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const recieverAccount = accounts.find(
+    (item) => item.username === inputTransferTo.value
+  );
+  console.log(amount, recieverAccount);
 });
 
 /////////////////////////////////////////////////// Get Max
