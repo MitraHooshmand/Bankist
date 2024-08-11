@@ -60,9 +60,10 @@ const inputClosePin = document.querySelector(".form__input--pin");
 
 //////////////////////////////////
 
-const displayMovements = function (arr) {
+const displayMovements = function (arr, sort = false) {
   containerMovements.innerHTML = "";
-  arr.forEach(function (movement, i) {
+  const movs = sort ? arr.slice().sort((a, b) => a - b) : arr;
+  movs.forEach(function (movement, i) {
     const type = movement > 0 ? "deposit" : "withdrawal";
 
     const html = `
@@ -210,6 +211,14 @@ btnClose.addEventListener("click", function (e) {
     labelWelcome.textContent = "Please login to get started ";
   }
   inputCloseUsername.value = inputClosePin.value = "";
+});
+/////////////////////////////////////////////////// Sort
+
+let sorted = false;
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
 /////////////////////////////////////////////////// Get Max
 
