@@ -82,8 +82,8 @@ const displayMovements = function (arr) {
 /////////////////////////////////////////////////  Print Balance
 
 const calcDisplayBalance = function (accs) {
-  accs.balance = `${accs.movements.reduce((acc, cur) => acc + cur, 0)} € `;
-  labelBalance.textContent = accs.balance;
+  accs.balance = `${accs.movements.reduce((acc, cur) => acc + cur, 0)}`;
+  labelBalance.textContent = accs.balance + "€";
 };
 // calcDisplayBalance(account1.movements);
 //////////////////////////////////////////////////////// Summery in/out
@@ -119,6 +119,18 @@ const creatUserName = function (accs) {
 };
 creatUserName(accounts);
 
+////////////////////////////////////////////////////// update UI
+const updateUI = function (acc) {
+  //display movements
+  displayMovements(acc.movements);
+
+  //display balance
+  calcDisplayBalance(acc);
+
+  //display summery
+  calcDisplaySummery(acc.movements, acc.interestRate);
+};
+
 let currentAccount;
 /////////////////////////////////////////////////// Login
 btnLogin.addEventListener("click", function (e) {
@@ -135,14 +147,8 @@ btnLogin.addEventListener("click", function (e) {
     //clear the input fields
     inputLoginPin.value = inputLoginUsername.value = "";
     inputLoginPin.blur();
-    //display movements
-    displayMovements(currentAccount.movements);
-
-    //display balance
-    calcDisplayBalance(currentAccount);
-
-    //display summery
-    calcDisplaySummery(currentAccount.movements, currentAccount.interestRate);
+    //// Update UI
+    updateUI(currentAccount);
   } else {
     console.log("wrong pass");
   }
@@ -156,7 +162,21 @@ btnTransfer.addEventListener("click", function (e) {
   const recieverAccount = accounts.find(
     (item) => item.username === inputTransferTo.value
   );
-  console.log(amount, recieverAccount);
+
+  if (
+    amount > 0 &&
+    recieverAccount &&
+    currentAccount.balance >= amount &&
+    recieverAccount.username !== currentAccount.username
+  ) {
+    console.log("transfer is valid");
+    currentAccount.movements.push(-amount);
+    recieverAccount.movements.push(amount);
+    updateUI(currentAccount);
+  }
+  inputTransferAmount.value = inputTransferTo.value = "";
+  inputTransferAmount.blur();
+  // console.log(amount, recieverAccount, currentAccount);
 });
 
 /////////////////////////////////////////////////// Get Max
