@@ -287,3 +287,11 @@ const movementsDescriptions = account1.movements.map((item, i) => {
 //   .flatMap((item) => item.movements)
 //   .reduce((acc, curr) => acc + curr, 0);
 // console.log(sumOfArray);
+
+labelBalance.addEventListener("click", function () {
+  const valuesUI = Array.from(
+    document.querySelectorAll(".movements__value"),
+    (item) => Number(item.textContent.replace("€", ""))
+  );
+  console.log(valuesUI);
+});
