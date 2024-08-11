@@ -178,7 +178,23 @@ btnTransfer.addEventListener("click", function (e) {
   inputTransferAmount.blur();
   // console.log(amount, recieverAccount, currentAccount);
 });
+//////////////////////////////////////////////////// Close Account
 
+btnClose.addEventListener("click", function (e) {
+  e.preventDefault();
+  if (
+    currentAccount.username === inputCloseUsername.value &&
+    currentAccount.pin === Number(inputClosePin.value)
+  ) {
+    const index = accounts.findIndex(
+      (item) => item.username === currentAccount.username
+    );
+    accounts.splice(index, 1);
+    containerApp.style.opacity = 0;
+    labelWelcome.textContent = "Please login to get started ";
+  }
+  inputCloseUsername.value = inputClosePin.value = "";
+});
 /////////////////////////////////////////////////// Get Max
 
 const getMax = function (accs) {
