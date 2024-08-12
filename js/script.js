@@ -288,10 +288,35 @@ const movementsDescriptions = account1.movements.map((item, i) => {
 //   .reduce((acc, curr) => acc + curr, 0);
 // console.log(sumOfArray);
 
-labelBalance.addEventListener("click", function () {
-  const valuesUI = Array.from(
-    document.querySelectorAll(".movements__value"),
-    (item) => Number(item.textContent.replace("€", ""))
-  );
-  console.log(valuesUI);
-});
+// labelBalance.addEventListener("click", function () {
+//   const valuesUI = Array.from(
+//     document.querySelectorAll(".movements__value"),
+//     (item) => Number(item.textContent("€", ""))
+//   );
+//   console.log(valuesUI);
+// });
+
+/////////////////////////////// Arrays methods practice
+
+const bankDepositSum = accounts
+  .flatMap((item) => item.movements)
+  .filter((item) => item > 0)
+  .reduce((acc, curr) => acc + curr, 0);
+
+console.log(bankDepositSum);
+
+// ////////////////////////////////
+// if (
+//   accounts
+//     .flatMap((item) => item.movements)
+//     .some((item, i, arr) => item >= 1000)
+// ) {
+
+///// reduce method as a counter
+const numDeposits1000 = accounts
+  .flatMap((item) => item.movements)
+  .reduce((acc, curr) => (curr >= 1000 ? acc + 1 : acc), 0);
+
+console.log(numDeposits1000);
+
+// }
