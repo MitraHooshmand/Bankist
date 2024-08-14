@@ -343,3 +343,46 @@ const convertTitleCase = function (title) {
 console.log(convertTitleCase("this is a nice title"));
 console.log(convertTitleCase("this is a LONG title but not too long"));
 console.log(convertTitleCase("and here is another title with an EXAMPLE"));
+
+//////////////////////////////
+
+// TEST DATA
+const dogs = [
+  { weight: 22, curFood: 250, owners: ["Alice", "Bob"] },
+  { weight: 8, curFood: 200, owners: ["Matilda"] },
+  { weight: 13, curFood: 275, owners: ["Sarah", "John"] },
+  { weight: 32, curFood: 340, owners: ["Michael"] },
+];
+
+const dogsFunction = function (arr) {
+  arr.forEach((item) => (item.recFood = Math.trunc(item.weight ** 0.75 * 28)));
+
+  const saraDog = arr.find((item) => item.owners.includes("Sarah"));
+  console.log(
+    `sara's dog is eating too ${
+      saraDog.curFood > saraDog.recFood ? "much" : "little"
+    }`
+  );
+
+  const ownersEatTooMuch = arr
+    .filter((item) => item.curFood > item.recFood)
+    .flatMap((item) => item.owners);
+  const rightDog = arr.some((item) => item.curFood === item.recFood);
+  const okAmount = arr.some(
+    (item) =>
+      item.curFood > item.recFood * 0.9 && item.curFood < item.recFood * 1.1
+  );
+  const sortedArray = arr.slice().sort((a, b) => a.recFood - b.recFood);
+  // const saraDog = arr
+  //   .flatMap((item) => item.owners)
+  //   .some((item) => (item = "sarah"));
+  console.log(arr);
+  console.log(saraDog);
+  console.log("--------------");
+  console.log(`${ownersEatTooMuch.join(" and ")}'s dogs eat too much`);
+  console.log(rightDog);
+  console.log(okAmount);
+  console.log(sortedArray);
+};
+
+dogsFunction(dogs);
