@@ -105,16 +105,22 @@ const inputClosePin = document.querySelector(".form__input--pin");
 
 const displayMovements = function (arr, sort = false) {
   containerMovements.innerHTML = "";
-  const movs = sort ? arr.slice().sort((a, b) => a - b) : arr;
+  const movs = sort
+    ? arr.movements.slice().sort((a, b) => a - b)
+    : arr.movements;
   movs.forEach(function (movement, i) {
     const type = movement > 0 ? "deposit" : "withdrawal";
+    const date = new Date(arr.movementsDates[i]);
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    const year = date.getFullYear();
 
     const html = `
   <div class="movements__row">
           <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-          <div class="movements__date">3 days ago</div>
+          <div class="movements__date">${day}/${month}/${year}</div>
           <div class="movements__value">${movement.toFixed(2)} €</div>
         </div>
 `;
@@ -166,7 +172,7 @@ creatUserName(accounts);
 ////////////////////////////////////////////////////// update UI
 const updateUI = function (acc) {
   //display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
 
   //display balance
   calcDisplayBalance(acc);
@@ -176,6 +182,7 @@ const updateUI = function (acc) {
 };
 
 let currentAccount;
+
 /////////////////////////////////////////////////// Login
 btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
@@ -188,6 +195,16 @@ btnLogin.addEventListener("click", function (e) {
       ".welcome"
     ).textContent = `Hi🖐, dear ${currentAccount.owner.split(" ", 1)}`;
     containerApp.style.opacity = 100;
+
+    // Create current date and time
+    const now = new Date();
+    const day = `${now.getDate()}`.padStart(2, 0);
+    const month = `${now.getMonth() + 1}`.padStart(2, 0);
+    const year = now.getFullYear();
+    const hour = `${now.getHours()}`.padStart(2, 0);
+    const minutes = `${now.getMinutes()}`.padStart(2, 0);
+    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${minutes} `;
+
     //clear the input fields
     inputLoginPin.value = inputLoginUsername.value = "";
     inputLoginPin.blur();
@@ -213,9 +230,14 @@ btnTransfer.addEventListener("click", function (e) {
     currentAccount.balance >= amount &&
     recieverAccount.username !== currentAccount.username
   ) {
-    console.log("transfer is valid");
+    // recording the transfer
     currentAccount.movements.push(-amount);
     recieverAccount.movements.push(amount);
+
+    // Add transfer date
+    currentAccount.movementsDates.push(new Date().toISOString());
+    recieverAccount.movementsDates.push(new Date().toISOString());
+
     updateUI(currentAccount);
   }
   inputTransferAmount.value = inputTransferTo.value = "";
@@ -233,6 +255,9 @@ btnLoan.addEventListener("click", function (e) {
     currentAccount.movements.some((item) => item >= amount * 0.1)
   ) {
     currentAccount.movements.push(amount);
+    // add date of loan
+    currentAccount.movementsDates.push(new Date().toISOString());
+
     updateUI(currentAccount);
   }
   inputLoanAmount.value = "";
@@ -260,7 +285,7 @@ btnClose.addEventListener("click", function (e) {
 let sorted = false;
 btnSort.addEventListener("click", function (e) {
   e.preventDefault();
-  displayMovements(currentAccount.movements, !sorted);
+  displayMovements(currentAccount, !sorted);
   sorted = !sorted;
 });
 /////////////////////////////////////////////////// Get Max
@@ -341,93 +366,93 @@ const movementsDescriptions = account1.movements.map((item, i) => {
 
 /////////////////////////////// Arrays methods practice
 
-const bankDepositSum = accounts
-  .flatMap((item) => item.movements)
-  .filter((item) => item > 0)
-  .reduce((acc, curr) => acc + curr, 0);
+// const bankDepositSum = accounts
+//   .flatMap((item) => item.movements)
+//   .filter((item) => item > 0)
+//   .reduce((acc, curr) => acc + curr, 0);
 
-console.log(bankDepositSum);
+// console.log(bankDepositSum);
 
-///// reduce method as a counter
-const numDeposits1000 = accounts
-  .flatMap((item) => item.movements)
-  .reduce((acc, cur) => (cur >= 1000 ? ++acc : acc), 0);
+// ///// reduce method as a counter
+// const numDeposits1000 = accounts
+//   .flatMap((item) => item.movements)
+//   .reduce((acc, cur) => (cur >= 1000 ? ++acc : acc), 0);
 
-console.log(numDeposits1000);
+// console.log(numDeposits1000);
 
-// }
+// // }
 
-const { deposite, withdrawl } = accounts
-  .flatMap((item) => item.movements)
-  .reduce(
-    (acc, cur) => {
-      // cur > 0 ? (acc.deposite += cur) : (acc.withdrawl += cur);
-      /// more structured way
-      acc[cur > 0 ? "deposite" : "withdrawl"] += cur;
-      return acc;
-    },
-    { deposite: 0, withdrawl: 0 }
-  );
-console.log(deposite, withdrawl);
+// const { deposite, withdrawl } = accounts
+//   .flatMap((item) => item.movements)
+//   .reduce(
+//     (acc, cur) => {
+//       // cur > 0 ? (acc.deposite += cur) : (acc.withdrawl += cur);
+//       /// more structured way
+//       acc[cur > 0 ? "deposite" : "withdrawl"] += cur;
+//       return acc;
+//     },
+//     { deposite: 0, withdrawl: 0 }
+//   );
+// console.log(deposite, withdrawl);
 
-////////////////////////////////////////
+// ////////////////////////////////////////
 
-const convertTitleCase = function (title) {
-  const capitalized = (str) => str[0].toUpperCase() + str.slice(1);
-  const exceptions = ["and", "a", "an", "the", "but", "or", "on", "in", "with"];
-  const titleCase = title
-    .toLowerCase()
-    .split(" ")
-    .map((item) => (exceptions.includes(item) ? item : capitalized(item)))
-    .join(" ");
-  return capitalized(titleCase);
-};
+// const convertTitleCase = function (title) {
+//   const capitalized = (str) => str[0].toUpperCase() + str.slice(1);
+//   const exceptions = ["and", "a", "an", "the", "but", "or", "on", "in", "with"];
+//   const titleCase = title
+//     .toLowerCase()
+//     .split(" ")
+//     .map((item) => (exceptions.includes(item) ? item : capitalized(item)))
+//     .join(" ");
+//   return capitalized(titleCase);
+// };
 
-console.log(convertTitleCase("this is a nice title"));
-console.log(convertTitleCase("this is a LONG title but not too long"));
-console.log(convertTitleCase("and here is another title with an EXAMPLE"));
+// console.log(convertTitleCase("this is a nice title"));
+// console.log(convertTitleCase("this is a LONG title but not too long"));
+// console.log(convertTitleCase("and here is another title with an EXAMPLE"));
 
-//////////////////////////////
+// //////////////////////////////
 
-// TEST DATA
-const dogs = [
-  { weight: 22, curFood: 250, owners: ["Alice", "Bob"] },
-  { weight: 8, curFood: 200, owners: ["Matilda"] },
-  { weight: 13, curFood: 275, owners: ["Sarah", "John"] },
-  { weight: 32, curFood: 340, owners: ["Michael"] },
-];
+// // TEST DATA
+// const dogs = [
+//   { weight: 22, curFood: 250, owners: ["Alice", "Bob"] },
+//   { weight: 8, curFood: 200, owners: ["Matilda"] },
+//   { weight: 13, curFood: 275, owners: ["Sarah", "John"] },
+//   { weight: 32, curFood: 340, owners: ["Michael"] },
+// ];
 
-const dogsFunction = function (arr) {
-  arr.forEach((item) => (item.recFood = Math.trunc(item.weight ** 0.75 * 28)));
+// const dogsFunction = function (arr) {
+//   arr.forEach((item) => (item.recFood = Math.trunc(item.weight ** 0.75 * 28)));
 
-  const saraDog = arr.find((item) => item.owners.includes("Sarah"));
-  console.log(
-    `sara's dog is eating too ${
-      saraDog.curFood > saraDog.recFood ? "much" : "little"
-    }`
-  );
+//   const saraDog = arr.find((item) => item.owners.includes("Sarah"));
+//   console.log(
+//     `sara's dog is eating too ${
+//       saraDog.curFood > saraDog.recFood ? "much" : "little"
+//     }`
+//   );
 
-  const ownersEatTooMuch = arr
-    .filter((item) => item.curFood > item.recFood)
-    .flatMap((item) => item.owners);
-  const rightDog = arr.some((item) => item.curFood === item.recFood);
-  const okAmount = arr.some(
-    (item) =>
-      item.curFood > item.recFood * 0.9 && item.curFood < item.recFood * 1.1
-  );
-  const sortedArray = arr.slice().sort((a, b) => a.recFood - b.recFood);
-  // const saraDog = arr
-  //   .flatMap((item) => item.owners)
-  //   .some((item) => (item = "sarah"));
-  console.log(arr);
-  console.log(saraDog);
-  console.log("--------------");
-  console.log(`${ownersEatTooMuch.join(" and ")}'s dogs eat too much`);
-  console.log(rightDog);
-  console.log(okAmount);
-  console.log(sortedArray);
-};
+//   const ownersEatTooMuch = arr
+//     .filter((item) => item.curFood > item.recFood)
+//     .flatMap((item) => item.owners);
+//   const rightDog = arr.some((item) => item.curFood === item.recFood);
+//   const okAmount = arr.some(
+//     (item) =>
+//       item.curFood > item.recFood * 0.9 && item.curFood < item.recFood * 1.1
+//   );
+//   const sortedArray = arr.slice().sort((a, b) => a.recFood - b.recFood);
+//   // const saraDog = arr
+//   //   .flatMap((item) => item.owners)
+//   //   .some((item) => (item = "sarah"));
+//   console.log(arr);
+//   console.log(saraDog);
+//   console.log("--------------");
+//   console.log(`${ownersEatTooMuch.join(" and ")}'s dogs eat too much`);
+//   console.log(rightDog);
+//   console.log(okAmount);
+//   console.log(sortedArray);
+// };
 
-dogsFunction(dogs);
+// dogsFunction(dogs);
 
-console.log(Number.parseInt("12wseff"));
+// console.log(Number.parseInt("12wseff"));
