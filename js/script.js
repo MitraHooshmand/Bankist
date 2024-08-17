@@ -119,6 +119,14 @@ const formatMovementDate = function (date, locale) {
     return new Intl.DateTimeFormat(locale).format(date);
   }
 };
+
+//////////////////////////////////    Formated currencies
+const formatCur = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(value);
+};
 //////////////////////////////////
 
 const displayMovements = function (arr, sort = false) {
@@ -130,13 +138,15 @@ const displayMovements = function (arr, sort = false) {
     const type = movement > 0 ? "deposit" : "withdrawal";
     const date = new Date(arr.movementsDates[i]);
     const displayDate = formatMovementDate(date, arr.locale);
+    const formatedMov = formatCur(movement, arr.locale, arr.currency);
+
     const html = `
   <div class="movements__row">
           <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
           <div class="movements__date">${displayDate}</div>
-          <div class="movements__value">${movement.toFixed(2)} €</div>
+          <div class="movements__value">${formatedMov} </div>
         </div>
 `;
     containerMovements.insertAdjacentHTML("afterbegin", html);
@@ -148,26 +158,38 @@ const displayMovements = function (arr, sort = false) {
 
 const calcDisplayBalance = function (accs) {
   accs.balance = `${accs.movements.reduce((acc, cur) => acc + cur, 0)}`;
-  labelBalance.textContent = `${accs.balance} €`;
+  labelBalance.textContent = formatCur(
+    accs.balance,
+    accs.locale,
+    accs.currency
+  );
 };
 // calcDisplayBalance(account1.movements);
 //////////////////////////////////////////////////////// Summery in/out
 
 const calcDisplaySummery = function (arr, intrest) {
-  const depositeSum = arr
+  const depositeSum = arr.movements
     .filter((item) => item > 0)
     .reduce((acc, curr) => acc + curr, 0);
-  labelSumIn.textContent = `${depositeSum.toFixed(2)} €`;
-  const withdrawlSum = arr
+  labelSumIn.textContent = formatCur(depositeSum, arr.locale, arr.currency);
+  const withdrawlSum = arr.movements
     .filter((item) => item < 0)
     .reduce((acc, curr) => acc + curr, 0);
-  labelSumOut.textContent = `${Math.abs(withdrawlSum).toFixed(2)} €`;
-  const intrestRate = arr
+  labelSumOut.textContent = formatCur(
+    Math.abs(withdrawlSum),
+    arr.locale,
+    arr.currency
+  );
+  const intrestRate = arr.movements
     .filter((item) => item > 0)
     .map((item) => (item * intrest) / 100)
     .filter((item) => item > 1)
     .reduce((acc, curr) => acc + curr, 0);
-  labelSumInterest.textContent = `${intrestRate.toFixed(2)} €`;
+  labelSumInterest.textContent = formatCur(
+    intrestRate,
+    arr.locale,
+    arr.currency
+  );
 };
 // calcDisplaySummery(account1.movements, account1.interestRate);
 
@@ -193,7 +215,7 @@ const updateUI = function (acc) {
   calcDisplayBalance(acc);
 
   //display summery
-  calcDisplaySummery(acc.movements, acc.interestRate);
+  calcDisplaySummery(acc, acc.interestRate);
 };
 
 let currentAccount;
